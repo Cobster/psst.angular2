@@ -5,34 +5,14 @@ This is a psake build automation script.
 
 #>
 
-Properties {
-    $Authors = "$env:USERNAME","and contributors"
-
-    $SrcDir = "$PSScriptRoot\src"
-    $TestDir = "$PSScriptRoot"
-    $TestResults = "PesterTestResults.xml"
-
-    # This should match the name of the PSD1 file for the module.
-    $ModuleName = Get-Item $SrcDir/*.psd1 |
+function Get-ModuleName($Dir) {
+    Get-Item $Dir/*.psd1 |
         Where-Object { $null -ne (Test-ModuleManifest -Path $_ -ErrorAction SilentlyContinue )} |
         Select-Object -First 1 -ExpandProperty BaseName
-
-    $ReleaseDir = "$PSScriptRoot\release"
-    $OutputDir = "$ReleaseDir\$ModuleName"
-    $Exclude = @("*.Tests.ps1")
-
-    $TemplateCache = "$env:LOCALAPPDATA\Psst.Angular2\$Version"
-    $ReleaseNotes = ""
-
-    $SettingsPath = "$env:LOCALAPPDATA\Psst.Angular2\SecuredBuildSettings.clixml"
-
-    $NoBuildOutputErrorMessage = "There is no build output. Run psake build."
-    $TestFailureMessage = "One or more tests failed, build will not continue."
-
-    $NuGetApiKey = $null
-    $PublishRepository = $null
 }
 
+
+. $PSScriptRoot\build.config.ps1
 . $PSScriptRoot\build-publishing.ps1
 
 Task default -depends Build
@@ -69,6 +49,15 @@ Task Clean `
     if ((Test-Path $TemplateCache)) {
         Write-Host "Deleting template cache at $TemplateCache"
         Remove-Item $TemplateCache -Force
+    }
+}
+
+Task CleanExamples `
+    -description "Deletes the contents of the examples directory." `
+    -requiredVariables ExamplesDir `
+{
+    if (Test-Path $ExamplesDir) {
+        Remove-Item $ExamplesDir -Force -Recurse -Verbose:$VerbosePreference
     }
 }
 
@@ -246,5 +235,20 @@ Task Uninstall `
         Remove-Item $UserModulePath -Force -Recurse
     }
 }
+
+Task Examples `
+    -depends CleanExamples `
+    -requiredVariables ExamplesDir, ModuleName, ReleaseDir `
+    -precondition { BuildOutputExists } `
+{
+    Remove-Module $ModuleName -Force -ErrorAction SilentlyContinue
+    Import-Module $ReleaseDir\$ModuleName
+
+
+
+    New-AngularApplication -Name Example -OutputPath $ExamplesDir
+}
+
+
 
 function BuildOutputExists { Test-Path $OutputDir }

@@ -7,16 +7,16 @@ RootModule = 'Psst.Angular2.psm1'
 ModuleVersion = '1.0.0'
 
 # ID used to uniquely identify this module
-GUID = 'fd663d9d-2dcb-43f3-bc78-d5af45e0c827'
+GUID = '8ba08a0f-b20a-4c99-a5e3-51f85cdd390a'
 
 # Author of this module
-Author = 'Jake'
+Author = 'Jake Bruun'
 
 # Company or vendor of this module
 CompanyName = ''
 
 # Copyright statement for this module
-Copyright = '(c) 2016 Jake. All rights reserved.'
+Copyright = '(c) 2016 Jake Bruun. All rights reserved.'
 
 # Description of the functionality provided by this module
 Description = 'Psst template generation.'
@@ -40,7 +40,7 @@ PowerShellVersion = '5.0'
 # ProcessorArchitecture = ''
 
 # Modules that must be imported into the global environment prior to importing this module
-# RequiredModules = 'Psst'
+RequiredModules = @('Psst')
 
 # Assemblies that must be loaded prior to importing this module
 # RequiredAssemblies = @()
@@ -59,7 +59,10 @@ PowerShellVersion = '5.0'
 
 # Functions to export from this module
 FunctionsToExport = @(
-    
+    'New-AngularApplication',
+    'New-AngularComponent',
+    'New-AngularFeature',
+    'New-AngularService'
 )
 
 # Cmdlets to export from this module
@@ -89,16 +92,16 @@ PrivateData = @{
         Tags = @('Psst','PsstGenerator')
 
         # A URL to the license for this module.
-        LicenseUri = 'https://github.com/Jake/psst.angular2/blob/master/LICENSE'
+        LicenseUri = 'https://github.com/Cobster/psst.angular2/blob/master/LICENSE'
         
         # A URL to the main website for this project.
-        ProjectUri = 'https://github.com/Jake/psst.angular2'
+        ProjectUri = 'https://github.com/Cobster/psst.angular2'
 
         # A URL to an icon representing this module.
         # IconUri = ''
 
         # ReleaseNotes of this module
-        # ReleaseNotes = 'https://github.com/Jake/psst.angular2/blob/master/ReleaseNotes.md'
+        # ReleaseNotes = 'https://github.com/jbruun/psst.angular2/blob/master/ReleaseNotes.md'
 
     } # End of PSData hashtable
 
