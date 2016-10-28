@@ -1,9 +1,9 @@
 import { TestBed, async } from '@angular/core/testing';
-import { $($Name)Component } from './$($Name.KebabCase).component';
+import { $($Name)Component } from './$($Model.Name.KebabCase).component';
 
-describe('$($Name)Component', () => {
+describe('$($Model.Name)Component', () => {
   it('should create an instance', () => {
-    let component = new $($Name)Component();
+    let component = new $($Model.Name)Component();
     expect(component).toBeTruthy();
   });
 });

@@ -28,59 +28,52 @@ Describe "New-AngularComponent" {
         ".\item-list.component.spec.ts" | Should Exist
     }
 
-
-    It "Should create a css file for the component when css is specified" {
-        New-AngularComponent -Name ItemList -Styles Css
+    # CSS
+    It "Should create a 'css' file when -Css switch is set" {
+        New-AngularComponent -Name ItemList -Css
         ".\item-list.component.css" | Should Exist
     }
 
-    It "Should not create a css file when -Styles is not specified" {
-        New-AngularComponent -Name ItemList
+    It "Should not create a 'css' file when -Css switch is not set" {
+         New-AngularComponent -Name ItemList
         ".\item-list.component.css" | Should Not Exist
     }
 
-    # It "Should define the 'styles' component metadata when -Styles is Css" {
-    #     New-AngularComponent -Name ItemList -Styles Css
-    #     ".\item-list.component.ts" | Should Contain "styles\: \[require\('\./item\-list\.component\.css'\)\]"
-    # }
-
-    It "Should not define the 'styles' component metadata when -Styles is not specified" {
-        New-AngularComponent -Name ItemList 
-        ".\item-list.component.ts" | Should Not Contain "styles\: \[require\('\./item\-list\.component\.css'\)\]"
+    It "Should include reference to 'css' file in styles metadata when -Css switch is set" {
+        New-AngularComponent -Name ItemList -Css
+        ".\item-list.component.ts" | Should Contain "styles: \[require\(.*'\.\/item-list\.component\.css'.*\)]"
     }
 
-    It "Should create a sass file for the component when 'sass' is specified for -Styles" {
-        New-AngularComponent -Name ItemList -Styles Sass
+
+    # SCSS
+    It "Should create a 'scss' files when -Sass switch is set" {
+        New-AngularComponent -Name ItemList -Sass
         ".\item-list.component.scss" | Should Exist
     }
 
-    It "Should create a sass file for the component when 'scss' is specified for -Styles" {
-        New-AngularComponent -Name ItemList -Styles Scss
-        ".\item-list.component.scss" | Should Exist
+    It "Should not create a 'scss' file when -Sass switch is not set" {
+         New-AngularComponent -Name ItemList
+        ".\item-list.component.scss" | Should Not Exist
     }
 
-    It "Should define the 'styles' component metadata when -Styles is sass" {
-        New-AngularComponent -Name ItemList -Styles Sass
-        ".\item-list.component.ts" | Should Contain "styles\: \[require\('\./item\-list\.component\.scss'\)\]"
+    It "Should include reference to 'scss' file in styles metadata when -Css switch is set" {
+        New-AngularComponent -Name ItemList -Sass
+        ".\item-list.component.ts" | Should Contain "styles: \[require\(.*'\.\/item-list\.component\.scss'.*\)]"
     }
 
-    It "Should create a less file for the component when 'less' is specified for -Styles" {
-        New-AngularComponent -Name ItemList -Styles Less
+    # LESS
+    It "Should create a 'less' file when -Less switch is set" {
+        New-AngularComponent -Name ItemList -Less
         ".\item-list.component.less" | Should Exist
     }
 
-    It "Should define the 'styles' component metadata when -Styles is less" {
-        New-AngularComponent -Name ItemList -Styles Less
-        ".\item-list.component.ts" | Should Contain "styles\: \[require\('\./item\-list\.component\.less'\)\]"
-    }
-
-    It "Should set the 'selector' metadata to the specified -Selector value" {
-        New-AngularComponent -Name ItemList -Selector 'x-item-list'
-        ".\item-list.component.ts" | Should Contain "selector\: 'x-item-list'"
-    }
-
-    It "Should not define 'selector' metadata when -Selector is not specified" {
+    It "Should not create a 'less' file when -Less switch is not set" {
         New-AngularComponent -Name ItemList
-        ".\item-list.component.ts" | Should Not Contain "selector\: '[\w\-]*'"
+        ".\item-list.component.less" | Should Not Exist
+    }
+
+    It "Should include reference to 'css' file in styles metadata when -Less switch is set" {
+        New-AngularComponent -Name ItemList -Less
+        ".\item-list.component.ts" | Should Contain "styles: \[require\(.*'\.\/item-list\.component\.less'.*\)]"
     }
 }

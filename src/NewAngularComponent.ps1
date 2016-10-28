@@ -24,62 +24,40 @@ function New-AngularComponent {
         [Parameter(Mandatory = $true)]
         [string] $Name,
         [string] $Selector,
-        [string] $Styles,
-        [string] $OutputPath = $pwd
+        [string] $OutputPath = $pwd,
+        [switch] $Css,
+        [switch] $Less,
+        [switch] $Sass
     )
 
     $Model = @{
         Name = (Get-NamingConventions -Name $Name)
-        Metadata = @()
+        Styles = @();
+        TemplateDir = "$PSScriptRoot\AngularComponent"
     }
 
-    $__Name = Get-NamingConventions -Name $Name
+    $Excludes = @();
 
-    $Stereotype = "component"
-    $TypescriptExtension = "ts"
-    $TestExtension = "spec.ts"
-    $HtmlExtension = "html"
-    $TemplateDir = "$PSScriptRoot\templates\angular2\component"
-
-    # Add the 'selector' to the component decorator metadata
-    if (-not ([String]::IsNullOrWhitespace($Selector))) {
-        $Model.Metadata += Expand-Template -InputFile "$TemplateDir\component.metadata.selector.ts" `
-            -Selector $Selector -Name $Model.Name -Stereotype $Stereotype -Extension $TypescriptExtension
+    if (-not $Css) {
+        $Excludes += "$($Model.TemplateDir)\`$(`$Model.Name.KebabCase).component.css"
+    }
+    else {
+        $Model.Styles += "'./$($Model.Name.KebabCase).component.css'"
     }
 
-    # Add the 'template' component decorator metadata
-    $Model.Metadata += Expand-Template -InputFile "$TemplateDir\component.metadata.template.ts" `
-        -Name $Model.Name -Stereotype $Stereotype -Extension $TypescriptExtension
-    
-    # Add a style file and 'styles' to the component decorator metadata
-    if (-not [String]::IsNullOrWhiteSpace($Styles)) {
-
-        $StylesExtension = $Styles.ToLower()
-        if ($StylesExtension -eq 'sass') {
-            $StylesExtension = 'scss'
-        }
-
-        $Model.Metadata += Expand-Template -InputFile "$TemplateDir\component.metadata.styles.ts" `
-            -Name $__Name -Extension $StylesExtension -Sterotype $Stereotype
-
-        Expand-Template -InputFile "$TemplateDir\component.styles" `
-            -OutputFile "$pwd\$($__Name.KebabCase).$Stereotype.$StylesExtension"
-             
+    if (-not $Less) {
+        $Excludes += "$($Model.TemplateDir)\`$(`$Model.Name.KebabCase).component.less"
+    }
+    else {
+        $Model.Styles += "'./$($Model.Name.KebabCase).component.less'"
     }
     
-    # Expand-Template -InputFile "$TemplateDir\component.ts" `
-    #     -OutputFile "$pwd\$($__Name.KebabCase).$Stereotype.$TypescriptExtension" `
-    #     -Model $Model 
-                  
-    # Expand-Template -InputFile "$TemplateDir\component.html" `
-    #     -Model $Model `
-    #     -OutputFile "$pwd\$($__Name.KebabCase).$Stereotype.$HtmlExtension"
+    if (-not $Sass) {
+        $Excludes += "$($Model.TemplateDir)\`$(`$Model.Name.KebabCase).component.scss"
+    } 
+    else {
+        $Model.Styles += "'./$($Model.Name.KebabCase).component.scss'"
+    }
 
-    # Expand-Template -InputFile "$TemplateDir\component.spec.ts" `
-    #     -Model $Model `
-    #     -OutputFile "$pwd\$($__Name.KebabCase).$Stereotype.$TestExtension"
-
-    $TemplateDir = "$PSScriptRoot\AngularComponent"
-
-    Expand-TemplateDirectory -InputPath $TemplateDir -OutputPath $OutputPath -Model $Model
+    Expand-TemplateDirectory -InputPath $Model.TemplateDir -OutputPath $OutputPath -Model $Model -Exclude $Excludes
 }
