@@ -1,16 +1,19 @@
 Properties {
-    
-    $Authors = "$env:USERNAME","and contributors"
-
-    $SrcDir = "$PSScriptRoot\src"
-    $TestDir = "$PSScriptRoot"
-    $ExamplesDir = "$PSScriptRoot\examples"
-    $TestResults = "PesterTestResults.xml"
 
     # This should match the name of the PSD1 file for the module.
     $ModuleName = "Psst.Angular2"
 
-    $ReleaseDir = "$PSScriptRoot\release"
+    $Authors = "$env:USERNAME","and contributors"
+
+    $ProjectDir = "$PSScriptRoot"
+    $SrcDir = "$ProjectDir\src"
+    $TestDir = "$ProjectDir"
+    $ExamplesDir = "$ProjectDir\examples"
+    $TestResults = "PesterTestResults.xml"
+
+    
+
+    $ReleaseDir = "$ProjectDir\release"
     $OutputDir = "$ReleaseDir\$ModuleName"
     $Exclude = @("*.Tests.ps1")
 
@@ -27,6 +30,3 @@ Properties {
     $NuGetApiKey = $null
     $PublishRepository = $null
 }
-
-# Executes 
-Task BuildExamples
