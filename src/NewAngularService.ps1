@@ -5,9 +5,9 @@ function New-AngularService {
     This flag indicates that the service is dependent on the Angular Http service.
 #>
     param (
-        [System.Management.Automation.PathInfo] $OutputPath = $PWD,
         [string] $Name,
-        [switch] $Http
+        [switch] $Http,
+        [string] $OutputPath = $PWD
     )
 
     $TemplateDir = "$PSScriptRoot\AngularService"
